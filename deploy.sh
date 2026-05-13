@@ -14,7 +14,7 @@ git add -A
 git commit -m "Initial commit: SnowDW landing page"
 
 echo ""
-echo "▶ Step 2: Creating GitHub repo and pushing..."
+echo "▶ Step 2: Pushing to GitHub..."
 # Requires GitHub CLI: brew install gh && gh auth login
 if ! command -v gh &>/dev/null; then
   echo ""
@@ -24,7 +24,20 @@ if ! command -v gh &>/dev/null; then
   echo "  Then re-run this script."
   exit 1
 fi
-gh repo create "$REPO_NAME" --public --source=. --remote=origin --push
+
+GH_USER=$(gh api user --jq '.login')
+REMOTE_URL="https://github.com/${GH_USER}/${REPO_NAME}.git"
+
+# Create the repo if it doesn't exist yet; otherwise just use it
+if gh repo view "${GH_USER}/${REPO_NAME}" &>/dev/null; then
+  echo "  Repo already exists — pushing to ${REMOTE_URL}"
+  git remote remove origin 2>/dev/null || true
+  git remote add origin "$REMOTE_URL"
+  git branch -M main 2>/dev/null || true
+  git push -u origin HEAD --force
+else
+  gh repo create "$REPO_NAME" --public --source=. --remote=origin --push
+fi
 
 echo ""
 echo "▶ Step 3: Deploying to Vercel..."
