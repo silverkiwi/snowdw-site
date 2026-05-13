@@ -819,18 +819,58 @@
 </footer>
 
 <script>
-  function handleSubmit(e) {
+  // ── FORMSPREE ──────────────────────────────────────────────────────────────
+  // 1. Go to https://formspree.io → New Form → copy your endpoint ID
+  // 2. Replace YOUR_FORM_ID below (the part after /f/)
+  // Example: if your endpoint is https://formspree.io/f/xpwzgkla
+  //          set FORMSPREE_ID = 'xpwzgkla'
+  const FORMSPREE_ID = 'xgodbveb';
+  // ──────────────────────────────────────────────────────────────────────────
+
+  async function handleSubmit(e) {
     e.preventDefault();
+    const form = e.target;
     const email = document.getElementById('email-input').value;
     const msg = document.getElementById('form-msg');
-    const btn = e.target.querySelector('button');
+    const btn = form.querySelector('button');
+
+    if (FORMSPREE_ID === 'YOUR_FORM_ID') {
+      // Dev mode: show success without actually submitting
+      console.warn('Formspree ID not set — form not submitted.');
+      showSuccess(btn, msg, email);
+      return;
+    }
+
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      if (res.ok) {
+        showSuccess(btn, msg, email);
+      } else {
+        const data = await res.json();
+        throw new Error(data?.errors?.[0]?.message || 'Submission failed');
+      }
+    } catch (err) {
+      btn.textContent = 'Get access →';
+      btn.disabled = false;
+      msg.textContent = `Something went wrong — email us directly at hello@snowdw.io`;
+      msg.style.color = '#f0883e';
+      console.error(err);
+    }
+  }
+
+  function showSuccess(btn, msg, email) {
     btn.textContent = '✓ Got it!';
     btn.style.background = '#3fb950';
     btn.disabled = true;
     msg.textContent = `Thanks! I'll be in touch at ${email} within 24 hours.`;
     msg.style.color = '#3fb950';
-    // In production, replace with a real form submission (e.g. Formspree, Resend, etc.)
-    console.log('Email submitted:', email);
   }
 
   // Smooth highlight nav link on scroll
