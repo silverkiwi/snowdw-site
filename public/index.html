@@ -456,6 +456,67 @@
       font-size: 0.83rem;
     }
 
+    /* ── SCREENSHOT GALLERY ── */
+    .gallery-section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .gallery-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .gallery-tab {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .gallery-tab:hover { border-color: var(--accent); color: var(--text); }
+    .gallery-tab.active { background: var(--accent); border-color: var(--accent); color: #0d1117; font-weight: 700; }
+
+    .gallery-frame {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg2);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+    }
+
+    .gallery-caption {
+      padding: 0.75rem 1.25rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .gallery-caption span { color: var(--accent); }
+
+    .gallery-img {
+      display: none;
+      width: 100%;
+      height: auto;
+      max-height: 600px;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .gallery-img.active { display: block; }
+
     /* ── SOCIAL PROOF ── */
     .trust-bar {
       border-top: 1px solid var(--border);
@@ -664,6 +725,35 @@
     </div>
   </div>
 </div>
+
+<!-- SCREENSHOT GALLERY -->
+<div class="gallery-section">
+  <div class="section-label">// See it in action</div>
+  <h2 class="section-title" style="margin-bottom:1.5rem">The full pipeline, step by step</h2>
+
+  <div class="gallery-tabs">
+    <button class="gallery-tab active" onclick="showTab(0)">1. Profile</button>
+    <button class="gallery-tab" onclick="showTab(1)">2. Infer FK — graph</button>
+    <button class="gallery-tab" onclick="showTab(2)">2. Infer FK — table</button>
+    <button class="gallery-tab" onclick="showTab(3)">3. Design schema</button>
+    <button class="gallery-tab" onclick="showTab(4)">3. Redesign with feedback</button>
+    <button class="gallery-tab" onclick="showTab(5)">5. Run dbt</button>
+  </div>
+
+  <div class="gallery-frame">
+    <img class="gallery-img active" src="screenshots/Profile_Data.png" alt="Table profiling — row counts, cardinality, detected dimensions" />
+    <img class="gallery-img" src="screenshots/Image_Infer.png" alt="FK inference — relationship graph" />
+    <img class="gallery-img" src="screenshots/Infer_Keys.png" alt="FK inference — table view with confidence scores" />
+    <img class="gallery-img" src="screenshots/Data_Modelled.png" alt="AI-designed star schema — fact and dimension tables" />
+    <img class="gallery-img" src="screenshots/Chat_All_Dimensions.png" alt="Interactive redesign — plain-English feedback loop" />
+    <img class="gallery-img" src="screenshots/DBT_Tests.png" alt="dbt pipeline — PASS=22 WARN=0 ERROR=0" />
+    <div class="gallery-caption" id="gallery-caption">
+      <span>step 1/5</span> Profile your tables — row counts, cardinality, 33 dimension candidates auto-detected
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
 
 <!-- HOW IT WORKS -->
 <section id="how-it-works">
@@ -880,6 +970,23 @@
     btn.disabled = true;
     msg.textContent = `Thanks! I'll be in touch at ${email} within 24 hours.`;
     msg.style.color = '#3fb950';
+  }
+
+  // ── GALLERY ──
+  const galleryMeta = [
+    { step: '1/5', caption: 'Profile your tables — row counts, cardinality, 33 dimension candidates auto-detected' },
+    { step: '2/5', caption: 'FK inference — 101 relationships found by comparing distinct value overlaps' },
+    { step: '2/5', caption: 'FK inference table view — coverage %, over-coverage %, and confidence scores' },
+    { step: '3/5', caption: 'AI-designed star schema — fact & dimension tables with grains and FK mappings' },
+    { step: '3/5', caption: 'Interactive redesign — type plain-English feedback and the LLM redesigns instantly' },
+    { step: '5/5', caption: 'dbt pipeline — PASS=22  WARN=0  ERROR=0  in 5.75 seconds' },
+  ];
+
+  function showTab(idx) {
+    document.querySelectorAll('.gallery-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+    document.querySelectorAll('.gallery-img').forEach((img, i) => img.classList.toggle('active', i === idx));
+    const meta = galleryMeta[idx];
+    document.getElementById('gallery-caption').innerHTML = `<span>step ${meta.step}</span> ${meta.caption}`;
   }
 
   // Smooth highlight nav link on scroll
