@@ -610,33 +610,35 @@
   </div>
 </div>
 
-<!-- TERMINAL DEMO -->
+<!-- UI DEMO / PIPELINE STEPS -->
 <div class="terminal-wrap">
   <div class="terminal">
     <div class="terminal-bar">
       <div class="dot dot-r"></div>
       <div class="dot dot-y"></div>
       <div class="dot dot-g"></div>
+      <span style="margin-left:0.75rem;font-family:var(--font-mono);font-size:0.75rem;color:var(--muted)">snowdw — AI Data Warehouse Generator</span>
+    </div>
+    <div style="display:flex;border-bottom:1px solid var(--border);background:var(--bg2)">
+      <div style="padding:0.55rem 1.1rem;font-size:0.78rem;font-family:var(--font-mono);border-right:1px solid var(--border);background:var(--accent);color:#0d1117;font-weight:700">1. Profile</div>
+      <div style="padding:0.55rem 1.1rem;font-size:0.78rem;font-family:var(--font-mono);border-right:1px solid var(--border);color:var(--muted)">2. Infer FK</div>
+      <div style="padding:0.55rem 1.1rem;font-size:0.78rem;font-family:var(--font-mono);border-right:1px solid var(--border);color:var(--muted)">3. Design</div>
+      <div style="padding:0.55rem 1.1rem;font-size:0.78rem;font-family:var(--font-mono);border-right:1px solid var(--border);color:var(--muted)">4. Generate</div>
+      <div style="padding:0.55rem 1.1rem;font-size:0.78rem;font-family:var(--font-mono);color:var(--muted)">5. Run dbt</div>
     </div>
     <div class="terminal-body">
-      <div><span class="t-prompt">$</span> <span class="t-cmd">snowdw connect postgresql://user:***@db.company.com/prod</span></div>
-      <div class="t-comment">&nbsp;</div>
-      <div><span class="t-info">▶ Profiling 47 tables...</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ orders (1.2M rows, 18 cols) — cardinality analysed</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ order_items (4.8M rows, 12 cols) — FK to orders.id inferred</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ users (84K rows, 31 cols) — dimension candidate</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ products, categories, payments... (44 more)</span></div>
-      <div class="t-comment">&nbsp;</div>
-      <div><span class="t-info">▶ Designing star schema (Claude claude-sonnet-4-6)...</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ fact_orders &nbsp; &nbsp;→ fact_payments &nbsp; &nbsp;→ fact_events</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ dim_customers &nbsp;→ dim_products &nbsp; &nbsp;→ dim_date</span></div>
-      <div class="t-comment">&nbsp;</div>
-      <div><span class="t-info">▶ Generating dbt models...</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ staging/ (47 models)</span></div>
-      <div><span class="t-dim">&nbsp; &nbsp;→ marts/ (9 models)</span></div>
-      <div class="t-comment">&nbsp;</div>
-      <div><span class="t-success">✔ Done in 3m 12s — dbt project written to ./snowdw_output/</span></div>
-      <div><span class="t-success">✔ Run `dbt run` to build your warehouse.</span></div>
+      <div style="margin-bottom:0.75rem"><span class="t-info" style="font-weight:700">Profile Source Tables</span> <span class="t-dim" style="font-size:0.75rem">schemas: public</span></div>
+      <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:0.2rem 1.5rem;font-size:0.78rem;margin-bottom:0.75rem">
+        <span class="t-dim">TABLE</span><span class="t-dim">ROWS</span><span class="t-dim">COLS</span><span class="t-dim">COLLECTED</span>
+        <span class="t-accent" style="color:var(--accent)">public.customer</span><span class="t-dim">50K</span><span class="t-dim">8</span><span class="t-success">✓</span>
+        <span class="t-accent" style="color:var(--accent)">public.orders</span><span class="t-dim">1.5M</span><span class="t-dim">9</span><span class="t-success">✓</span>
+        <span class="t-accent" style="color:var(--accent)">public.lineitem</span><span class="t-dim">6M</span><span class="t-dim">16</span><span class="t-success">✓</span>
+        <span class="t-accent" style="color:var(--accent)">public.part</span><span class="t-dim">200K</span><span class="t-dim">9</span><span class="t-success">✓</span>
+        <span class="t-accent" style="color:var(--accent)">public.supplier</span><span class="t-dim">10K</span><span class="t-dim">7</span><span class="t-success">✓</span>
+        <span class="t-dim" style="font-style:italic">+ 2 more tables</span><span></span><span></span><span></span>
+      </div>
+      <div style="font-size:0.78rem;margin-bottom:0.35rem"><span class="t-purple">DETECTED DIMENSIONS</span> <span style="background:var(--bg3);border:1px solid var(--border);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.72rem">33</span></div>
+      <div style="font-size:0.75rem;color:var(--muted)">Market Segment · Shipping Mode · Order Priority · Return Flag · Line Status · Nation · Region · <span style="color:var(--accent2)">+26 more</span></div>
     </div>
   </div>
 </div>
@@ -645,20 +647,20 @@
 <div class="trust-bar" style="margin-top: 5rem;">
   <div class="trust-inner">
     <div class="trust-stat">
-      <strong>&lt; 5 min</strong>
-      <span>Postgres to working dbt project</span>
+      <strong>&lt; 6 min</strong>
+      <span>Postgres to passing dbt pipeline</span>
     </div>
     <div class="trust-stat">
-      <strong>0 hrs</strong>
-      <span>Manual schema design required</span>
+      <strong>PASS=22</strong>
+      <span>WARN=0 ERROR=0 on first run</span>
     </div>
     <div class="trust-stat">
-      <strong>Kimball</strong>
-      <span>Best-practice star schema output</span>
+      <strong>101</strong>
+      <span>FK relationships auto-inferred</span>
     </div>
     <div class="trust-stat">
-      <strong>100%</strong>
-      <span>dbt-native, your codebase</span>
+      <strong>Any LLM</strong>
+      <span>OpenRouter or Claude BYOK</span>
     </div>
   </div>
 </div>
@@ -667,35 +669,42 @@
 <section id="how-it-works">
   <div class="section-label">// How it works</div>
   <h2 class="section-title">From messy Postgres to analytics-ready warehouse</h2>
-  <p class="section-sub">Four steps. No manual schema design. No consulting engagement. No six-month project.</p>
+  <p class="section-sub">Five guided steps. No manual schema design. No consulting engagement. No six-month project.</p>
 
   <div class="steps">
     <div class="step">
       <div class="step-num s1">01</div>
       <div class="step-body">
-        <h3>Connect your Postgres database</h3>
-        <p>Point SnowDW at your database with a connection string. It works with any Postgres instance — RDS, Supabase, Neon, Railway, self-hosted.</p>
+        <h3>Profile your tables</h3>
+        <p>SnowDW scans every table in your Postgres schema: row counts, column cardinality, sample values, data types, and inferred dimension candidates. Works with any Postgres instance — RDS, Supabase, Neon, Railway, self-hosted.</p>
       </div>
     </div>
     <div class="step">
       <div class="step-num s2">02</div>
       <div class="step-body">
-        <h3>Automatic table profiling</h3>
-        <p>SnowDW scans every table: row counts, column cardinality, sample values, data types. It infers foreign key relationships even if they're not formally declared. No config required.</p>
+        <h3>Infer foreign key relationships</h3>
+        <p>SnowDW finds relationships between tables by comparing distinct value overlaps — even when FKs aren't formally declared. In a real run it found 101 relationships with high confidence, including ones the original schema didn't document.</p>
       </div>
     </div>
     <div class="step">
       <div class="step-num s3">03</div>
       <div class="step-body">
-        <h3>LLM-designed star schema</h3>
-        <p>The profiling context is sent to an LLM (Claude or DeepSeek via OpenRouter) which designs a Kimball-style star schema: fact tables, dimension tables, and grain definitions. It reasons about your actual data, not a generic template.</p>
+        <h3>AI designs your star schema</h3>
+        <p>Choose any LLM via OpenRouter (Deepseek, Claude, GPT-4o, etc.) or bring your own Claude API key. The model designs a Kimball-style star schema — fact tables, dimension tables, grains — and explains its reasoning. Not happy with the output? Just tell it what to change in plain English and it redesigns on the spot.</p>
       </div>
     </div>
     <div class="step">
       <div class="step-num s4">04</div>
       <div class="step-body">
-        <h3>Complete dbt project output</h3>
-        <p>SnowDW generates a full dbt project: <code>sources.yml</code>, staging models, mart models, and schema docs. Run <code>dbt run</code> and your warehouse is live.</p>
+        <h3>Generate the dbt project</h3>
+        <p>Approve the schema design and SnowDW generates a complete dbt project: <code>sources.yml</code>, staging models, mart models, and schema docs. Standard, readable SQL — your codebase to own and extend.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num s1" style="border-color:var(--accent2);color:var(--accent2)">05</div>
+      <div class="step-body">
+        <h3>Run dbt — green on first try</h3>
+        <p>Hit "Run dbt" directly in the UI. SnowDW runs <code>dbt deps → dbt run → dbt test</code> and streams the output live. In a real run on 7 source tables: <code>PASS=22 WARN=0 ERROR=0</code> in under 6 seconds.</p>
       </div>
     </div>
   </div>
@@ -713,32 +722,32 @@
     <div class="feature-card">
       <div class="feature-icon">🔍</div>
       <h3>Deep table profiling</h3>
-      <p>Row counts, cardinality estimates, null rates, sample values, and inferred relationships — all without touching your schema docs.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🧠</div>
-      <h3>LLM schema design</h3>
-      <p>Uses Claude or DeepSeek to reason about your actual data and design a sensible Kimball star schema — facts, dimensions, grains — not a cookie-cutter template.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">📦</div>
-      <h3>Complete dbt output</h3>
-      <p>Staging models, mart models, sources.yml, schema.yml with column docs. Drop it into your repo and run it.</p>
+      <p>Row counts, cardinality, sample values, and inferred dimension candidates — all auto-detected without touching a config file or schema doc.</p>
     </div>
     <div class="feature-card">
       <div class="feature-icon">🔗</div>
-      <h3>FK inference</h3>
-      <p>Finds relationships between tables even when foreign keys aren't formally declared — common in production Postgres databases.</p>
+      <h3>FK inference without constraints</h3>
+      <p>Finds relationships by comparing distinct value overlaps between columns. Works on real-world Postgres where FKs are rarely formally declared.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <h3>Minutes, not months</h3>
-      <p>What used to take a data architect weeks to design and document, SnowDW does in under five minutes.</p>
+      <div class="feature-icon">🧠</div>
+      <h3>Any LLM, your choice</h3>
+      <p>Pick from DeepSeek, Claude, GPT-4o and more via OpenRouter — or bring your own Claude API key. Run multiple models in parallel and compare designs side-by-side.</p>
     </div>
     <div class="feature-card">
-      <div class="feature-icon">🔧</div>
-      <h3>Editable & yours</h3>
-      <p>The generated dbt project is standard, readable code. Tweak models, rename columns, add tests — it's your codebase now.</p>
+      <div class="feature-icon">💬</div>
+      <h3>Interactive redesign loop</h3>
+      <p>Not happy with the schema? Type plain-English feedback — "add separate region and nation dimensions", "use a single wide fact table" — and the LLM redesigns instantly.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>Complete dbt project output</h3>
+      <p>Staging models, mart models, sources.yml, schema.yml with column docs. Standard SQL, drop it in your repo, run it with <code>dbt run</code>.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✅</div>
+      <h3>Green on first run</h3>
+      <p>SnowDW runs the dbt pipeline for you and streams output live. Real result on 7 source tables: <code>PASS=22 WARN=0 ERROR=0</code> in 5.75 seconds.</p>
     </div>
   </div>
 </section>
